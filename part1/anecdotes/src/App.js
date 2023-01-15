@@ -11,6 +11,17 @@ const Vote = ({ voteCount }) => {
   return <h4>has no vote!</h4>;
 };
 
+const LargestVote = ({ hasVotes, anecdotes }) => {
+  if (hasVotes > -1) {
+    return (
+      <div>
+        <h2>{anecdotes}</h2>
+      </div>
+    );
+  }
+  return null;
+};
+
 const Button = ({ text, onClickHandler }) => (
   <button onClick={onClickHandler}>{text}</button>
 );
@@ -29,6 +40,7 @@ const App = () => {
 
   const [selected, setSelected] = useState(0);
   const [vote, setVote] = useState(points);
+  const [largest, setLargest] = useState(-1);
 
   const handleAnecdotes = () => {
     const random = Math.floor(Math.random() * anecdotes.length);
@@ -36,7 +48,18 @@ const App = () => {
   };
 
   const handleVote = () => {
+    let largestVote = 1;
+
     vote[selected] += 1;
+
+    vote.forEach((vote) => {
+      if (vote > largestVote) {
+        largestVote = vote;
+      }
+    });
+
+    setLargest(vote.indexOf(largestVote));
+
     setVote([...vote]);
   };
 
@@ -46,6 +69,7 @@ const App = () => {
       <Vote voteCount={vote[selected]} />
       <Button text='vote' onClickHandler={handleVote} />
       <Button text='next anecdotes' onClickHandler={handleAnecdotes} />
+      <LargestVote hasVotes={largest} anecdotes={anecdotes[largest]} />
     </div>
   );
 };
