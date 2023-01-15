@@ -7,9 +7,14 @@ const Button = ({ text, onClickHandler }) => (
 const Heading = ({ text }) => <h2>{text}</h2>;
 
 const StatisticLine = ({ text, value }) => (
-  <p>
-    {text} &nbsp; {value}
-  </p>
+  <table>
+    <tbody>
+      <tr>
+        <td>{text} &nbsp;</td>
+        <td>&nbsp;{value}</td>
+      </tr>
+    </tbody>
+  </table>
 );
 
 const Statistics = ({ good, neutral, bad }) => {
@@ -21,8 +26,11 @@ const Statistics = ({ good, neutral, bad }) => {
         <StatisticLine text='neutral' value={neutral} />
         <StatisticLine text='bad' value={bad} />
         <StatisticLine text='all' value={total} />
-        <StatisticLine text='average' value={total / 3} />
-        <StatisticLine text='positive' value={(good * 100) / total} />
+        <StatisticLine text='average' value={(total / 3).toFixed(2)} />
+        <StatisticLine
+          text='positive'
+          value={((good * 100) / total).toFixed(2) + '%'}
+        />
       </div>
     );
   }
