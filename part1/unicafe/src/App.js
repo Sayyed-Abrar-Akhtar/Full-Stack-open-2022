@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const CustomButton = ({ text, onClickHandler }) => (
   <button onClick={onClickHandler}>{text}</button>
@@ -12,32 +12,54 @@ const Result = ({ text, value }) => (
   </p>
 );
 
+const Statistics = ({ good, neutral, bad }) => {
+  if (good > 0 || neutral > 0 || bad > 0) {
+    const total = good + bad + neutral;
+    return (
+      <div>
+        <Result text='good' value={good} />
+        <Result text='neutral' value={neutral} />
+        <Result text='bad' value={bad} />
+        <Result text='all' value={total} />
+        <Result text='average' value={total / 3} />
+        <Result text='positive' value={(good * 100) / total} />
+      </div>
+    );
+  }
+  return <h4>No feedback given!</h4>;
+};
+
 const App = () => {
   // save clicks of each button to its own state
-  const [good, setGood] = useState(0);
-  const [neutral, setNeutral] = useState(0);
-  const [bad, setBad] = useState(0);
-  const [average, setAverage] = useState(0);
-  const [positive, setPositive] = useState(0);
 
-  useEffect(() => {
-    if (good > 0 || neutral > 0 || bad > 0) {
-      const total = good + neutral + bad;
-      setAverage(total / 3);
-      setPositive((good * 100) / total); // 80% * 40 = 32
-    }
-  }, [good, neutral, bad]);
+  const [feedback, setFeedback] = useState({
+    good: 0,
+    neutral: 0,
+    bad: 0,
+  });
 
   const handleGoodClick = () => {
-    setGood(good + 1);
+    const updatedFeedback = {
+      ...feedback,
+      good: feedback.good + 1,
+    };
+    setFeedback(updatedFeedback);
   };
 
   const handleNeutralClick = () => {
-    setNeutral(neutral + 1);
+    const updatedFeedback = {
+      ...feedback,
+      neutral: feedback.neutral + 1,
+    };
+    setFeedback(updatedFeedback);
   };
 
   const handleBadClick = () => {
-    setBad(bad + 1);
+    const updatedFeedback = {
+      ...feedback,
+      bad: feedback.bad + 1,
+    };
+    setFeedback(updatedFeedback);
   };
 
   return (
@@ -47,12 +69,11 @@ const App = () => {
       <CustomButton text='neutral' onClickHandler={handleNeutralClick} />
       <CustomButton text='bad' onClickHandler={handleBadClick} />
       <Heading text='Statistics' />
-      <Result text='good' value={good} />
-      <Result text='neutral' value={neutral} />
-      <Result text='bad' value={bad} />
-      <Result text='all' value={good + bad + neutral} />
-      <Result text='average' value={average} />
-      <Result text='positive' value={positive} />
+      <Statistics
+        good={feedback.good}
+        neutral={feedback.neutral}
+        bad={feedback.bad}
+      />
     </div>
   );
 };
