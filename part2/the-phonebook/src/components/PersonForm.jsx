@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { createNewPerson, updatePerson } from '../services/persons';
 
-const PersonForm = ({ onPersonAdd, persons }) => {
+const PersonForm = ({ onPersonAdd, onPersonEdit, persons }) => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const handleNameChange = (event) => {
@@ -17,8 +18,13 @@ const PersonForm = ({ onPersonAdd, persons }) => {
     const results = persons.filter(
       (person) => person.name.toLowerCase() === newName.toLowerCase()
     );
+
     if (results.length) {
-      alert(`${newName} is already added to phonebook`);
+      alert(
+        `${newName} is already added to phonebook, replace the old number with a new one?`
+      );
+
+      onPersonEdit({ ...results[0], number: newNumber });
       setNewName('');
       setNewNumber('');
     } else {
@@ -26,9 +32,10 @@ const PersonForm = ({ onPersonAdd, persons }) => {
         name: newName,
         number: newNumber,
       };
-      axios
-        .post('http://localhost:3001/persons/', newPerson)
-        .then((response) => onPersonAdd(response.data));
+
+      const eventHandler = (response) => onPersonAdd(response);
+      createNewPerson(newPerson).then(eventHandler);
+
       setNewName('');
       setNewNumber('');
     }

@@ -4,7 +4,7 @@ import Persons from './components/Persons';
 import PersonForm from './components/PersonForm';
 import Filter from './components/Filter';
 import { useEffect } from 'react';
-import { deletePerson, getAllPersons } from './services/persons';
+import { deletePerson, getAllPersons, updatePerson } from './services/persons';
 
 function App() {
   const [persons, setPersons] = useState([]);
@@ -35,6 +35,15 @@ function App() {
     }
   };
 
+  const handlePersonEdit = (person) => {
+    const eventHandler = (response) => {
+      console.log(response);
+    };
+
+    updatePerson(person.id, person).then(eventHandler);
+    getAllPersons().then((response) => setPersons(response));
+  };
+
   const handleSearchResult = (results) => setPersons(results);
 
   return (
@@ -43,7 +52,11 @@ function App() {
       <Filter onSearch={handleSearchResult} persons={persons} />
 
       <h2>Add new entry in the Phonebook</h2>
-      <PersonForm onPersonAdd={handlePersonUpdate} persons={persons} />
+      <PersonForm
+        onPersonAdd={handlePersonUpdate}
+        onPersonEdit={handlePersonEdit}
+        persons={persons}
+      />
       <h2>Numbers</h2>
       <Persons persons={persons} onDelete={handlePersonDelete} />
     </div>
