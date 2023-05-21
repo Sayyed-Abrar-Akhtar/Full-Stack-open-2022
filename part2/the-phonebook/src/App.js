@@ -10,13 +10,19 @@ function App() {
 
   const handleAddPerson = (event) => {
     event.preventDefault();
-    const newPerson = {
-      id: persons.length + 1,
-      name: newName,
-    };
+    const results = persons.filter((person) => person.name === newName);
+    if (results.length) {
+      alert(`${newName} is already added to phonebook`);
+      setNewName('');
+    } else {
+      const newPerson = {
+        id: persons.length + 1,
+        name: newName,
+      };
 
-    setPersons(persons.concat(newPerson));
-    setNewName('');
+      setPersons(persons.concat(newPerson));
+      setNewName('');
+    }
   };
   return (
     <div>
