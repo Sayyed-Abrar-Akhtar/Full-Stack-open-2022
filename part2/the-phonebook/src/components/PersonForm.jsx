@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { createNewPerson, updatePerson } from '../services/persons';
 
-const PersonForm = ({ onPersonAdd, onPersonEdit, persons }) => {
+const PersonForm = ({ onPersonAdd, onPersonEdit, onSuccess, persons }) => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const handleNameChange = (event) => {
@@ -33,7 +32,10 @@ const PersonForm = ({ onPersonAdd, onPersonEdit, persons }) => {
         number: newNumber,
       };
 
-      const eventHandler = (response) => onPersonAdd(response);
+      const eventHandler = (response) => {
+        onPersonAdd(response);
+        onSuccess(response);
+      };
       createNewPerson(newPerson).then(eventHandler);
 
       setNewName('');

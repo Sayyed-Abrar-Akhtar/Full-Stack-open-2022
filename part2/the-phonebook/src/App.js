@@ -8,6 +8,7 @@ import { deletePerson, getAllPersons, updatePerson } from './services/persons';
 
 function App() {
   const [persons, setPersons] = useState([]);
+  const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
     const eventHandler = (response) => {
@@ -18,6 +19,13 @@ function App() {
 
     promise.then(eventHandler);
   }, []);
+
+  const handleSuccess = (person) => {
+    setSuccessMessage(`Added ${person.name}`);
+    setTimeout(() => {
+      setSuccessMessage('');
+    }, 2000);
+  };
 
   const handlePersonUpdate = (newPerson) => {
     //console.log(newPerson);
@@ -49,12 +57,14 @@ function App() {
   return (
     <div>
       <h2>Phonebook</h2>
+      {successMessage ? <p className='success'>{successMessage}</p> : null}
       <Filter onSearch={handleSearchResult} persons={persons} />
 
       <h2>Add new entry in the Phonebook</h2>
       <PersonForm
         onPersonAdd={handlePersonUpdate}
         onPersonEdit={handlePersonEdit}
+        onSuccess={handleSuccess}
         persons={persons}
       />
       <h2>Numbers</h2>
