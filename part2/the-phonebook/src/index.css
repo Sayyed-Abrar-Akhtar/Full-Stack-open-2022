@@ -1,8 +1,17 @@
 .success {
-  width: 100%;
-  background: #d2d2d2;
   color: green;
   border: 2px solid green;
+}
+
+.error {
+  color: red;
+  border: 2px solid red;
+}
+
+.success,
+.error {
+  width: 100%;
+  background: #d2d2d2;
   border-radius: 4px;
   font-weight: 700;
   padding: 20px 10px;

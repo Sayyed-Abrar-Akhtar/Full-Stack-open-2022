@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { createNewPerson, updatePerson } from '../services/persons';
+import { createNewPerson } from '../services/persons';
 
 const PersonForm = ({ onPersonAdd, onPersonEdit, onSuccess, persons }) => {
   const [newName, setNewName] = useState('');

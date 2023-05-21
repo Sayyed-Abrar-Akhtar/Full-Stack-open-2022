@@ -9,6 +9,7 @@ import { deletePerson, getAllPersons, updatePerson } from './services/persons';
 function App() {
   const [persons, setPersons] = useState([]);
   const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const eventHandler = (response) => {
@@ -35,7 +36,14 @@ function App() {
   const handlePersonDelete = (person) => {
     const isConfirmed = window.confirm(`Delete ${person.name}?`);
     const eventHandler = (response) => {
-      console.log(response);
+      if (response.status === 404) {
+        setErrorMessage(
+          `Information of ${person.name} has already removed from server`
+        );
+        setTimeout(() => {
+          setErrorMessage('');
+        }, 2000);
+      }
     };
     if (isConfirmed) {
       deletePerson(person.id).then(eventHandler);
@@ -58,6 +66,7 @@ function App() {
     <div>
       <h2>Phonebook</h2>
       {successMessage ? <p className='success'>{successMessage}</p> : null}
+      {errorMessage ? <p className='error'>{errorMessage}</p> : null}
       <Filter onSearch={handleSearchResult} persons={persons} />
 
       <h2>Add new entry in the Phonebook</h2>

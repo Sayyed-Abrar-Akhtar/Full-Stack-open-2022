@@ -19,7 +19,7 @@ function updatePerson(id, updatedPerson) {
 
 function deletePerson(id) {
   const request = axios.delete(`${baseUrl}/${id}`);
-  return request.then((response) => response);
+  return request.then((response) => response).catch((error) => error.response);
 }
 
 export { getAllPersons, createNewPerson, updatePerson, deletePerson };
