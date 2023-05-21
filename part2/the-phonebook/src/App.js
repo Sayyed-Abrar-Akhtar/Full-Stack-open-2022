@@ -18,11 +18,12 @@ function App() {
       setPersons(response.data);
     };
 
-    const promise = axios.get('http://localhost:3001/persons');
+    const promise = axios.get('http://localhost:3001/persons/');
     promise.then(eventHandler);
   }, []);
 
   const handlePersonUpdate = (newPerson) => {
+    console.log(newPerson);
     setPersons(persons.concat(newPerson));
   };
 
