@@ -14,10 +14,16 @@ const Part = ({ part: { name, exercises } }) => (
 
 const Content = ({ parts }) => (
   <div>
-    <Part part={parts[0]} />
-    <Part part={parts[1]} />
-    <Part part={parts[2]} />
+    {parts.map((part) => (
+      <Part key={part.id} part={part} />
+    ))}
   </div>
+);
+
+const Total = ({ exercises1, exercises2, exercises3, exercises4 }) => (
+  <strong>
+    total of {exercises1 + exercises2 + exercises3 + exercises4} exercises
+  </strong>
 );
 
 function Course({ course }) {
@@ -25,6 +31,12 @@ function Course({ course }) {
     <div>
       <Header course={course.name} />
       <Content parts={course.parts} />
+      <Total
+        exercises1={course.parts[0].exercises}
+        exercises2={course.parts[1].exercises}
+        exercises3={course.parts[2].exercises}
+        exercises4={course.parts[3].exercises}
+      />
     </div>
   );
 }
