@@ -39,6 +39,8 @@ function App() {
         area: item?.area,
         languages: item?.languages,
         flag: item?.flag,
+        lat: item?.latlng[0],
+        lon: item?.latlng[1],
       }));
     console.log(filteredCountries);
     setFilteredCountries(filteredCountries);
