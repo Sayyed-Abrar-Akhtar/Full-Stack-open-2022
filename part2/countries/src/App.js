@@ -33,6 +33,7 @@ function App() {
             .includes(e.target.value.toLowerCase()) && e.target.value
       )
       .map((item) => ({
+        id: item?.cca2,
         name: item?.name?.common,
         capitals: item?.capital,
         area: item?.area,
@@ -41,6 +42,16 @@ function App() {
       }));
     console.log(filteredCountries);
     setFilteredCountries(filteredCountries);
+  };
+
+  const handleClick = (e, id) => {
+    const updatedCountryObj = filteredCountries.map((country) => {
+      if (country.id === id) {
+        return { ...country, show: true };
+      }
+      return { ...country, show: false };
+    });
+    setFilteredCountries(updatedCountryObj);
   };
 
   return (
@@ -65,11 +76,23 @@ function App() {
               <strong>Too many matches, specify another filter</strong>
             </p>
           ) : (
-            <ul>
-              {filteredCountries.map((country) => (
-                <li key={country.name}>{country.name}</li>
-              ))}
-            </ul>
+            <div>
+              {filteredCountries.map((country) =>
+                country.show ? (
+                  <Country country={country} />
+                ) : (
+                  <div
+                    key={country.id}
+                    style={{ listStyleType: 'none', margin: '15px 0' }}
+                  >
+                    {country.name} &nbsp;
+                    <button onClick={(e) => handleClick(e, country.id)}>
+                      show
+                    </button>
+                  </div>
+                )
+              )}
+            </div>
           )}
         </div>
       ) : (
