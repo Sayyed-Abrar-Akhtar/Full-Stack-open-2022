@@ -1,7 +1,12 @@
 const express = require('express');
+const morgan = require('morgan');
 
 const app = express();
+
+// middleware
 app.use(express.json());
+app.use(morgan('tiny'));
+
 let data = [
   {
     id: 1,
@@ -54,7 +59,6 @@ app.get('/api/persons/:id', (request, response) => {
 
 app.post('/api/persons/', (req, res) => {
   const id = generateId();
-  console.log(req);
   const person = req.body;
   const checkName = data.find((item) => item.name === person.name);
   if (checkName) {
