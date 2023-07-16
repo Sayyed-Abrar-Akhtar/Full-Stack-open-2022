@@ -56,6 +56,17 @@ app.post('/api/persons/', (req, res) => {
   const id = generateId();
   console.log(req);
   const person = req.body;
+  const checkName = data.find((item) => item.name === person.name);
+  if (checkName) {
+    return res.status(400).json({
+      error: 'Person Name must be unique',
+    });
+  }
+  if (person.name.length < 1 || person.number.length < 1) {
+    return res.status(400).json({
+      error: 'The name or number is missing!',
+    });
+  }
   person.id = id;
   data = data.concat(person);
   res.json(person);
