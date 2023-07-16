@@ -1,0 +1,7 @@
+POST http://localhost:3001/api/persons/ HTTP/1.1
+content-type: application/json
+
+{
+  "name":"Sayyed Abrar Akhtar",
+  "number":"+977-98-00-56-78-91"
+}

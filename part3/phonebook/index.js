@@ -26,7 +26,7 @@ let data = [
 ];
 
 app.get('/', (request, response) => {
-  response.send('<h1>Welcome to the phonebook backend.</h1>');
+  response.send(`<h1>Welcome to the phonebook backend.</h1>`);
 });
 
 app.get('/api/persons/', (request, response) => {
@@ -52,6 +52,15 @@ app.get('/api/persons/:id', (request, response) => {
   response.json(person);
 });
 
+app.post('/api/persons/', (req, res) => {
+  const id = generateId();
+  console.log(req);
+  const person = req.body;
+  person.id = id;
+  data = data.concat(person);
+  res.json(person);
+});
+
 app.delete('/api/person/:id', (req, res) => {
   const id = Number(req.params.id);
   const person = data.find((person) => person.id === id);
@@ -61,6 +70,10 @@ app.delete('/api/person/:id', (req, res) => {
   data = data.filter((person) => person.id !== id);
   res.status(204).end();
 });
+
+const generateId = () => {
+  return Math.abs(Math.floor(Math.random() * 515454524554584));
+};
 
 const PORT = 3001;
 app.listen(PORT, () => {
