@@ -54,7 +54,7 @@ app.get('/', (request, response) => {
   response.send(`<h1>Welcome to the phonebook backend.</h1>`);
 });
 
-app.get('/api/persons/', (request, response) => {
+app.get('/api/persons/', (request, response, next) => {
   Phonebook.find({})
     .then((record) => {
       if (record) {
@@ -64,31 +64,30 @@ app.get('/api/persons/', (request, response) => {
       }
     })
     .catch((error) => {
-      console.log(error);
-      // 400 Bad request
-      response.status(400).send({ status: 'fail', data: { error } });
+      next(error);
     });
 });
 
-app.get('/info/', (request, response) => {
-  const html = `<section>
-    <p>Phonebook has info for ${data.length} ${
-    data.length > 1 ? 'peoples' : 'people'
-  }.</p>
-  <p>${new Date()}</p>
-  </section>`;
-  response.send(html);
+app.get('/info/', (request, response, next) => {
+  Phonebook.find({})
+    .then((result) => {
+      const html = `<section>
+    <p>Phonebook has info for ${result.length} ${
+        result.length > 1 ? 'peoples' : 'people'
+      }.</p>
+    <p>${new Date()}</p>
+    </section>`;
+      response.send(html);
+    })
+    .catch((error) => next(error));
 });
 
-app.get('/api/persons/:id', (request, response) => {
-  try {
-    Phonebook.findById(request.params.id).then((record) => {
+app.get('/api/persons/:id', (request, response, next) => {
+  Phonebook.findById(request.params.id)
+    .then((record) => {
       response.json(record);
-    });
-  } catch (error) {
-    response.status(404).json({ status: 'fail', error });
-  }
-  const id = Number(request.params.id);
+    })
+    .catch((error) => next(error));
 });
 
 app.post('/api/persons/', (req, res) => {
