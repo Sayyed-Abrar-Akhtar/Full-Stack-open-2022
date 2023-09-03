@@ -93,7 +93,9 @@ app.get('/api/persons/:id', (request, response) => {
 
 app.post('/api/persons/', (req, res) => {
   const { name, number } = req.body;
-  //const checkName = data.find((item) => item.name === person.name);
+  Phonebook.find({ name })
+    .then((result) => console.log(result))
+    .catch((error) => console.log(error));
   // if (checkName) {
   //   return res.status(400).json({
   //     error: 'Person Name must be unique',
@@ -113,6 +115,15 @@ app.post('/api/persons/', (req, res) => {
     //console.log(`added ${result.name} number ${result.number} to phonebook`);
     res.json(person);
   });
+});
+
+app.put('/api/persons/:id', (req, res, next) => {
+  const { name, number } = req.body;
+
+  const record = { name, number };
+  Phonebook.findByIdAndUpdate(req.params.id, record, { new: true })
+    .then((updatedRecord) => res.json(updatedRecord))
+    .catch((error) => next(error));
 });
 
 app.delete('/api/persons/:id', (req, res, next) => {
