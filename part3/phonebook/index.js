@@ -82,22 +82,27 @@ app.get('/api/persons/:id', (request, response) => {
 });
 
 app.post('/api/persons/', (req, res) => {
-  const id = generateId();
-  const person = req.body;
-  const checkName = data.find((item) => item.name === person.name);
-  if (checkName) {
-    return res.status(400).json({
-      error: 'Person Name must be unique',
-    });
-  }
-  if (person.name.length < 1 || person.number.length < 1) {
+  const { name, number } = req.body;
+  //const checkName = data.find((item) => item.name === person.name);
+  // if (checkName) {
+  //   return res.status(400).json({
+  //     error: 'Person Name must be unique',
+  //   });
+  // }
+  if (name.length < 1 || number.length < 1) {
     return res.status(400).json({
       error: 'The name or number is missing!',
     });
   }
-  person.id = id;
-  data = data.concat(person);
-  res.json(person);
+  const record = new Phonebook({
+    name,
+    number,
+  });
+
+  record.save().then((person) => {
+    //console.log(`added ${result.name} number ${result.number} to phonebook`);
+    res.json(person);
+  });
 });
 
 app.delete('/api/person/:id', (req, res) => {
