@@ -11,7 +11,16 @@ mongoose
   .catch((error) => console.log('error connecting to MongoDB:', error.message));
 
 const phonebookSchema = new mongoose.Schema({
-  name: String,
+  name: {
+    type: String,
+    validate: {
+      validator: function (v) {
+        return v.length > 2;
+      },
+      message: (props) =>
+        `Name ${props.value} is shorter than the minimum allowed length (3)`,
+    },
+  },
   number: String,
 });
 

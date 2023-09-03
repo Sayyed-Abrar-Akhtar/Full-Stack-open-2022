@@ -90,11 +90,8 @@ app.get('/api/persons/:id', (request, response, next) => {
     .catch((error) => next(error));
 });
 
-app.post('/api/persons/', (req, res) => {
+app.post('/api/persons/', (req, res, next) => {
   const { name, number } = req.body;
-  Phonebook.find({ name })
-    .then((result) => console.log(result))
-    .catch((error) => console.log(error));
   // if (checkName) {
   //   return res.status(400).json({
   //     error: 'Person Name must be unique',
@@ -110,10 +107,13 @@ app.post('/api/persons/', (req, res) => {
     number,
   });
 
-  record.save().then((person) => {
-    //console.log(`added ${result.name} number ${result.number} to phonebook`);
-    res.json(person);
-  });
+  record
+    .save()
+    .then((person) => {
+      //console.log(`added ${result.name} number ${result.number} to phonebook`);
+      res.json(person);
+    })
+    .catch((error) => next(error));
 });
 
 app.put('/api/persons/:id', (req, res, next) => {
@@ -140,10 +140,20 @@ app.delete('/api/persons/:id', (req, res, next) => {
 const errorHandler = (error, request, response, next) => {
   console.error(error.message);
 
+  console.log('error name:', error.name);
+
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' });
   }
 
+  if (error.name === 'ValidationError') {
+    return response.status(500).send({
+      status: 'fail',
+      message:
+        `${error.message}` ||
+        `Name is shorter than the minimum allowed length (3)`,
+    });
+  }
   next(error);
 };
 
