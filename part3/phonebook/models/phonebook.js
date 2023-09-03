@@ -21,7 +21,34 @@ const phonebookSchema = new mongoose.Schema({
         `Name ${props.value} is shorter than the minimum allowed length (3)`,
     },
   },
-  number: String,
+  number: {
+    type: String,
+    validate: [
+      {
+        validator: function (v) {
+          return v.length > 7;
+        },
+        message: (props) =>
+          `Phone Number ${props.value} is shorter than the minimum allowed length (8) or more`,
+      },
+      {
+        validator: function (v) {
+          const [firstPart] = v.split('-');
+          if (firstPart.length <= 3 && firstPart.length > 1) return true;
+          return false;
+        },
+        message: (props) => `First part must be of two or three numbers`,
+      },
+      {
+        validator: function (v) {
+          const [firstPart, secondPart] = v.split('-');
+
+          return Boolean(Number(firstPart) && Number(secondPart));
+        },
+        message: (props) => `Phone numbers must be number`,
+      },
+    ],
+  },
 });
 
 phonebookSchema.set('toJSON', {

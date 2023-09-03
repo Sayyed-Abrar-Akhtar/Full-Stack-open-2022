@@ -149,6 +149,7 @@ const errorHandler = (error, request, response, next) => {
   if (error.name === 'ValidationError') {
     return response.status(500).send({
       status: 'fail',
+      error,
       message:
         `${error.message}` ||
         `Name is shorter than the minimum allowed length (3)`,
