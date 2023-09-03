@@ -55,9 +55,19 @@ app.get('/', (request, response) => {
 });
 
 app.get('/api/persons/', (request, response) => {
-  Phonebook.find({}).then((record) => {
-    response.json(record);
-  });
+  Phonebook.find({})
+    .then((record) => {
+      if (record) {
+        response.json(record);
+      } else {
+        response.status(404).end();
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      // 400 Bad request
+      response.status(400).send({ status: 'fail', data: { error } });
+    });
 });
 
 app.get('/info/', (request, response) => {
@@ -105,19 +115,17 @@ app.post('/api/persons/', (req, res) => {
   });
 });
 
-app.delete('/api/person/:id', (req, res) => {
-  const id = Number(req.params.id);
-  const person = data.find((person) => person.id === id);
-  if (!person) {
-    res.status(404).end();
-  }
-  data = data.filter((person) => person.id !== id);
-  res.status(204).end();
+app.delete('/api/persons/:id', (req, res, next) => {
+  Phonebook.findByIdAndDelete(req.params.id)
+    .then((result) => {
+      //console.log(result);
+      res.status(204).end();
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(400).send({ error: 'malformatted id' });
+    });
 });
-
-const generateId = () => {
-  return Math.abs(Math.floor(Math.random() * 515454524554584));
-};
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
