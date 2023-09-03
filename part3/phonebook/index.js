@@ -118,14 +118,26 @@ app.post('/api/persons/', (req, res) => {
 app.delete('/api/persons/:id', (req, res, next) => {
   Phonebook.findByIdAndDelete(req.params.id)
     .then((result) => {
-      //console.log(result);
+      console.log(result);
       res.status(204).end();
     })
     .catch((error) => {
       console.log(error);
-      res.status(400).send({ error: 'malformatted id' });
+      next(error);
     });
 });
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message);
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' });
+  }
+
+  next(error);
+};
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
