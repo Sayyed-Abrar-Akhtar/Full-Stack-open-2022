@@ -3,7 +3,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 
 const app = express();
-
+console.log(process.argv[2]);
 // middleware
 app.use(cors());
 app.use(express.json());
