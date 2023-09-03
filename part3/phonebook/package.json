@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js dZ6u1J1va3h7S2M7",
+    "dev": "nodemon index.js",
     "build:ui": "rm -rf build && cd ../../part2/the-phonebook && npm run build && cp -r build ../../part3/phonebook",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -22,6 +22,7 @@
   "homepage": "https://github.com/Sayyed-Abrar-Akhtar/Full-Stack-open-2022#readme",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "mongoose": "^7.5.0"
   },

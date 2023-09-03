@@ -1,9 +1,12 @@
+require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 
+const Phonebook = require('./models/phonebook');
+
 const app = express();
-console.log(process.argv[2]);
+//console.log(process.argv[2]);
 // middleware
 app.use(cors());
 app.use(express.json());
@@ -52,7 +55,9 @@ app.get('/', (request, response) => {
 });
 
 app.get('/api/persons/', (request, response) => {
-  response.json(data);
+  Phonebook.find({}).then((record) => {
+    response.json(record);
+  });
 });
 
 app.get('/info/', (request, response) => {
@@ -66,12 +71,14 @@ app.get('/info/', (request, response) => {
 });
 
 app.get('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id);
-  const person = data.find((person) => person.id === id);
-  if (!person) {
-    response.status(404).end();
+  try {
+    Phonebook.findById(request.params.id).then((record) => {
+      response.json(record);
+    });
+  } catch (error) {
+    response.status(404).json({ status: 'fail', error });
   }
-  response.json(person);
+  const id = Number(request.params.id);
 });
 
 app.post('/api/persons/', (req, res) => {
@@ -107,7 +114,7 @@ const generateId = () => {
   return Math.abs(Math.floor(Math.random() * 515454524554584));
 };
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
