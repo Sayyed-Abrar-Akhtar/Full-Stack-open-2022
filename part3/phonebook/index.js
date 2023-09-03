@@ -27,31 +27,31 @@ app.use(
 );
 app.use(express.static('build'));
 
-let data = [
-  {
-    id: 1,
-    name: 'Arto Hellas',
-    number: '040-123456',
-  },
-  {
-    id: 2,
-    name: 'Ada Lovelace',
-    number: '39-44-5323523',
-  },
-  {
-    id: 3,
-    name: 'Dan Abramov',
-    number: '12-43-234345',
-  },
-  {
-    id: 4,
-    name: 'Mary Poppendieck',
-    number: '39-23-6423122',
-  },
-];
+// let data = [
+//   {
+//     id: 1,
+//     name: 'Arto Hellas',
+//     number: '040-123456',
+//   },
+//   {
+//     id: 2,
+//     name: 'Ada Lovelace',
+//     number: '39-44-5323523',
+//   },
+//   {
+//     id: 3,
+//     name: 'Dan Abramov',
+//     number: '12-43-234345',
+//   },
+//   {
+//     id: 4,
+//     name: 'Mary Poppendieck',
+//     number: '39-23-6423122',
+//   },
+// ]
 
 app.get('/', (request, response) => {
-  response.send(`<h1>Welcome to the phonebook backend.</h1>`);
+  response.send('<h1>Welcome to the phonebook backend.</h1>');
 });
 
 app.get('/api/persons/', (request, response, next) => {
@@ -73,8 +73,8 @@ app.get('/info/', (request, response, next) => {
     .then((result) => {
       const html = `<section>
     <p>Phonebook has info for ${result.length} ${
-        result.length > 1 ? 'peoples' : 'people'
-      }.</p>
+  result.length > 1 ? 'peoples' : 'people'
+}.</p>
     <p>${new Date()}</p>
     </section>`;
       response.send(html);
@@ -152,7 +152,7 @@ const errorHandler = (error, request, response, next) => {
       error,
       message:
         `${error.message}` ||
-        `Name is shorter than the minimum allowed length (3)`,
+        'Name is shorter than the minimum allowed length (3)',
     });
   }
   next(error);

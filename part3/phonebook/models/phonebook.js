@@ -7,7 +7,7 @@ if (!mongoURI) mongoose.set('strictQuery', false);
 //console.log('connecting to', mongoURI);
 mongoose
   .connect(mongoURI)
-  .then((result) => console.log('Connected to MongoDB'))
+  .then(() => console.log('Connected to MongoDB'))
   .catch((error) => console.log('error connecting to MongoDB:', error.message));
 
 const phonebookSchema = new mongoose.Schema({
@@ -37,7 +37,7 @@ const phonebookSchema = new mongoose.Schema({
           if (firstPart.length <= 3 && firstPart.length > 1) return true;
           return false;
         },
-        message: (props) => `First part must be of two or three numbers`,
+        message: 'First part must be of two or three numbers',
       },
       {
         validator: function (v) {
@@ -45,7 +45,7 @@ const phonebookSchema = new mongoose.Schema({
 
           return Boolean(Number(firstPart) && Number(secondPart));
         },
-        message: (props) => `Phone numbers must be number`,
+        message: 'Phone numbers must be number',
       },
     ],
   },
